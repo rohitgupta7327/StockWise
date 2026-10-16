@@ -31,13 +31,20 @@ const allowedOrigins = [
 ];
 
 if (process.env.CLIENT_URL) {
-  allowedOrigins.push(process.env.CLIENT_URL);
+  process.env.CLIENT_URL.split(',').forEach((url) => {
+    const cleanUrl = url.trim().replace(/\/$/, '');
+    if (cleanUrl) allowedOrigins.push(cleanUrl);
+  });
 }
 
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow non-browser requests (mobile/curl/Postman) or whitelisted origins
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow non-browser requests (mobile/curl/Postman), whitelisted origins, or Netlify apps
+    if (
+      !origin ||
+      allowedOrigins.includes(origin) ||
+      /^https:\/\/.*\.netlify\.app$/.test(origin)
+    ) {
       callback(null, true);
     } else {
       callback(new Error(`CORS blocked: Origin ${origin} not allowed`));
