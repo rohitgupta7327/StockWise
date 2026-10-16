@@ -5,29 +5,44 @@ const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('stockwise_user');
-    return saved ? JSON.parse(saved) : null;
+    try {
+      const saved = localStorage.getItem('stockwise_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      localStorage.removeItem('stockwise_user');
+      return null;
+    }
   });
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => {
+    try {
+      const token = localStorage.getItem('stockwise_token');
+      const saved = localStorage.getItem('stockwise_user');
+      return Boolean(token && !saved);
+    } catch {
+      return false;
+    }
+  });
 
   useEffect(() => {
-    const token = localStorage.getItem('stockwise_token');
-    if (token && !user) {
-      getMe()
-        .then((res) => {
-          setUser(res.data.data);
-          localStorage.setItem('stockwise_user', JSON.stringify(res.data.data));
-        })
-        .catch(() => {
-          localStorage.removeItem('stockwise_token');
-          localStorage.removeItem('stockwise_user');
-          setUser(null);
-        })
-        .finally(() => setLoading(false));
-    } else {
+    try {
+      const token = localStorage.getItem('stockwise_token');
+      if (token && !user) {
+        getMe()
+          .then((res) => {
+            setUser(res.data.data);
+            localStorage.setItem('stockwise_user', JSON.stringify(res.data.data));
+          })
+          .catch(() => {
+            localStorage.removeItem('stockwise_token');
+            localStorage.removeItem('stockwise_user');
+            setUser(null);
+          })
+          .finally(() => setLoading(false));
+      }
+    } catch {
       setLoading(false);
     }
-  }, []);
+  }, [user]);
 
   const loginUser = (userData, token) => {
     localStorage.setItem('stockwise_token', token);
