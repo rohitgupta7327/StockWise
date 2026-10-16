@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext, useContext, useCallback } from 'react';
+import { useState, createContext, useContext, useCallback } from 'react';
 import { HiCheckCircle, HiXCircle, HiExclamation } from 'react-icons/hi';
 
 const ToastContext = createContext(null);

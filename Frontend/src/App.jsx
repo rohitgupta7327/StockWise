@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './components/common/Toast';
 import Layout from './components/layout/Layout';
 import LoadingSpinner from './components/common/LoadingSpinner';
+import ErrorBoundary from './components/common/ErrorBoundary';
 
 // Code-split pages for minimal initial bundle size & ultra-fast initial page load
 const Login = lazy(() => import('./pages/Login'));
@@ -54,132 +55,134 @@ const PublicRoute = ({ children }) => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <ToastProvider>
-          <Suspense fallback={<LoadingSpinner message="Loading application..." />}>
-            <Routes>
-              {/* Public Routes */}
-              <Route
-                path="/login"
-                element={
-                  <PublicRoute>
-                    <Login />
-                  </PublicRoute>
-                }
-              />
+    <ErrorBoundary>
+      <BrowserRouter>
+        <AuthProvider>
+          <ToastProvider>
+            <Suspense fallback={<LoadingSpinner message="Loading application..." />}>
+              <Routes>
+                {/* Public Routes */}
+                <Route
+                  path="/login"
+                  element={
+                    <PublicRoute>
+                      <Login />
+                    </PublicRoute>
+                  }
+                />
 
-              {/* Protected Routes */}
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
+                {/* Protected Routes */}
+                <Route
+                  path="/"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/products"
-                element={
-                  <ProtectedRoute>
-                    <Products />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/products"
+                  element={
+                    <ProtectedRoute>
+                      <Products />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/products/new"
-                element={
-                  <ProtectedRoute adminOnly>
-                    <ProductForm />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/products/new"
+                  element={
+                    <ProtectedRoute adminOnly>
+                      <ProductForm />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/products/:id/edit"
-                element={
-                  <ProtectedRoute adminOnly>
-                    <ProductForm />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/products/:id/edit"
+                  element={
+                    <ProtectedRoute adminOnly>
+                      <ProductForm />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/inventory"
-                element={
-                  <ProtectedRoute>
-                    <Inventory />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/inventory"
+                  element={
+                    <ProtectedRoute>
+                      <Inventory />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/low-stock"
-                element={
-                  <ProtectedRoute>
-                    <LowStock />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/inventory/low-stock"
-                element={<Navigate to="/low-stock" replace />}
-              />
+                <Route
+                  path="/low-stock"
+                  element={
+                    <ProtectedRoute>
+                      <LowStock />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/inventory/low-stock"
+                  element={<Navigate to="/low-stock" replace />}
+                />
 
-              <Route
-                path="/sales"
-                element={
-                  <ProtectedRoute>
-                    <Sales />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/sales"
+                  element={
+                    <ProtectedRoute>
+                      <Sales />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/sales/new"
-                element={
-                  <ProtectedRoute>
-                    <NewSale />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/sales/new"
+                  element={
+                    <ProtectedRoute>
+                      <NewSale />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/sales/:id"
-                element={
-                  <ProtectedRoute>
-                    <InvoiceDetail />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/sales/:id"
+                  element={
+                    <ProtectedRoute>
+                      <InvoiceDetail />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/reports"
-                element={
-                  <ProtectedRoute adminOnly>
-                    <Reports />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/reports"
+                  element={
+                    <ProtectedRoute adminOnly>
+                      <Reports />
+                    </ProtectedRoute>
+                  }
+                />
 
-              <Route
-                path="/users"
-                element={
-                  <ProtectedRoute adminOnly>
-                    <UserManagement />
-                  </ProtectedRoute>
-                }
-              />
+                <Route
+                  path="/users"
+                  element={
+                    <ProtectedRoute adminOnly>
+                      <UserManagement />
+                    </ProtectedRoute>
+                  }
+                />
 
-              {/* Catch-all redirect */}
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Suspense>
-        </ToastProvider>
-      </AuthProvider>
-    </BrowserRouter>
+                {/* Catch-all redirect */}
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </Suspense>
+          </ToastProvider>
+        </AuthProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 
