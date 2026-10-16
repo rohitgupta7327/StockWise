@@ -1,0 +1,45 @@
+{
+  "name": "stockwise",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"cyan,magenta\" \"npm run server\" \"npm run client\"",
+    "client": "npm --prefix Frontend run dev",
+    "server": "npm --prefix Backend run dev",
+    "seed": "npm --prefix Backend run seed",
+    "build": "npm --prefix Frontend run build",
+    "lint": "npm --prefix Frontend run lint",
+    "preview": "npm --prefix Frontend run preview"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "concurrently": "^10.0.6",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "vite": "^7.2.4"
+  },
+  "description": "StockWise - Retail Inventory & Point of Sale Management System",
+  "keywords": [
+    "inventory",
+    "retail",
+    "pos",
+    "point-of-sale",
+    "sales-management",
+    "react",
+    "vite",
+    "express",
+    "mongodb"
+  ],
+  "author": "",
+  "license": "ISC"
+}
