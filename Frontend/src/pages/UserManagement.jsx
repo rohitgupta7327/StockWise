@@ -58,53 +58,68 @@ const UserManagement = () => {
 
   return (
     <div>
-      <div className="page-header">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="page-title">User Management</h1>
-          <p className="page-description">Manage administrator and cashier staff access permissions</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">User Management</h1>
+          <p className="text-sm text-slate-500 mt-1">Manage administrator and cashier staff access permissions</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setShowModal(true)}>
-          <HiOutlinePlus /> Add New User
+        <button
+          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 transition shrink-0"
+          onClick={() => setShowModal(true)}
+        >
+          <HiOutlinePlus className="text-lg" /> Add New User
         </button>
       </div>
 
-      <div className="card">
-        <div className="table-container">
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+        <div className="overflow-x-auto">
           {loading ? (
             <LoadingSpinner message="Loading user directory..." />
           ) : users.length === 0 ? (
-            <div className="empty-state">
-              <h3>No users registered</h3>
+            <div className="p-12 text-center text-sm text-slate-400">
+              No users registered
             </div>
           ) : (
-            <table className="table">
+            <table className="w-full text-left text-sm">
               <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                  <th className="text-center">Status</th>
-                  <th>Created At</th>
-                  <th className="text-center">Action</th>
+                <tr className="border-b border-slate-100 bg-slate-50/75">
+                  <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Name</th>
+                  <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Email</th>
+                  <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Role</th>
+                  <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 text-center">Status</th>
+                  <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Created At</th>
+                  <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 text-center">Action</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {users.map((u) => (
-                  <tr key={u._id}>
-                    <td className="font-semibold">{u.name}</td>
-                    <td>{u.email}</td>
-                    <td>
-                      <span className={`badge ${u.role === 'admin' ? 'badge-primary' : 'badge-neutral'}`}>
+                  <tr key={u._id} className="hover:bg-slate-50/50 transition">
+                    <td className="px-6 py-4 font-semibold text-slate-900">{u.name}</td>
+                    <td className="px-6 py-4 text-slate-600">{u.email}</td>
+                    <td className="px-6 py-4">
+                      <span
+                        className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                          u.role === 'admin'
+                            ? 'bg-indigo-50 text-indigo-700 border border-indigo-200/80'
+                            : 'bg-slate-100 text-slate-700 border border-slate-200/80'
+                        }`}
+                      >
                         {u.role.toUpperCase()}
                       </span>
                     </td>
-                    <td className="text-center">
+                    <td className="px-6 py-4 text-center">
                       <StatusBadge isActive={u.isActive} />
                     </td>
-                    <td>{formatDateTime(u.createdAt)}</td>
-                    <td className="text-center">
+                    <td className="px-6 py-4 text-xs text-slate-500">
+                      {formatDateTime(u.createdAt)}
+                    </td>
+                    <td className="px-6 py-4 text-center">
                       <button
-                        className={`btn btn-sm ${u.isActive ? 'btn-secondary danger' : 'btn-primary'}`}
+                        className={`inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
+                          u.isActive
+                            ? 'border border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100'
+                            : 'bg-indigo-600 text-white hover:bg-indigo-700'
+                        }`}
                         onClick={() => handleToggleStatus(u._id, u.name, u.isActive)}
                       >
                         {u.isActive ? 'Deactivate' : 'Activate'}
@@ -120,24 +135,35 @@ const UserManagement = () => {
 
       {/* Modal for Creating User */}
       {showModal && (
-        <div className="modal-backdrop" onClick={() => setShowModal(false)}>
-          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <div className="modal-title">
-                <HiOutlineUserAdd style={{ marginRight: 8, color: 'var(--primary-500)' }} />
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 backdrop-blur-xs p-4"
+          onClick={() => setShowModal(false)}
+        >
+          <div
+            className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 sm:p-8 space-y-6"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+              <div className="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <HiOutlineUserAdd className="text-indigo-600 text-xl" />
                 Add New Staff / Admin
               </div>
-              <button className="btn-icon" onClick={() => setShowModal(false)}>
-                <HiX />
+              <button
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition"
+                onClick={() => setShowModal(false)}
+              >
+                <HiX className="text-xl" />
               </button>
             </div>
 
-            <form onSubmit={handleCreate}>
-              <div className="form-group">
-                <label className="form-label">Full Name *</label>
+            <form onSubmit={handleCreate} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                  Full Name *
+                </label>
                 <input
                   type="text"
-                  className="form-input"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
                   placeholder="e.g. Rahul Sharma"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -145,11 +171,13 @@ const UserManagement = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Email Address *</label>
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                  Email Address *
+                </label>
                 <input
                   type="email"
-                  className="form-input"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
                   placeholder="rahul@store.com"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -157,11 +185,13 @@ const UserManagement = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Password *</label>
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                  Password *
+                </label>
                 <input
                   type="password"
-                  className="form-input"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
                   placeholder="Min 6 characters"
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -170,10 +200,12 @@ const UserManagement = () => {
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">System Role *</label>
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                  System Role *
+                </label>
                 <select
-                  className="form-select"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
                   value={form.role}
                   onChange={(e) => setForm({ ...form, role: e.target.value })}
                 >
@@ -182,15 +214,19 @@ const UserManagement = () => {
                 </select>
               </div>
 
-              <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', marginTop: 24 }}>
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
                 <button
                   type="button"
-                  className="btn btn-secondary"
+                  className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-xs hover:bg-slate-50 transition"
                   onClick={() => setShowModal(false)}
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-primary" disabled={submitting}>
+                <button
+                  type="submit"
+                  className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 transition disabled:opacity-60"
+                  disabled={submitting}
+                >
                   {submitting ? 'Creating User...' : 'Create Account'}
                 </button>
               </div>

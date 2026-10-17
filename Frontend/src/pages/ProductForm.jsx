@@ -88,154 +88,168 @@ const ProductForm = () => {
 
   return (
     <div>
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">{isEdit ? 'Edit Product' : 'Add New Product'}</h1>
-          <p className="page-description">
-            {isEdit
-              ? 'Update product details, pricing, and reorder levels'
-              : 'Add a new inventory item to your store catalog'}
-          </p>
-        </div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+          {isEdit ? 'Edit Product' : 'Add New Product'}
+        </h1>
+        <p className="text-sm text-slate-500 mt-1">
+          {isEdit
+            ? 'Update product details, pricing, and reorder levels'
+            : 'Add a new inventory item to your store catalog'}
+        </p>
       </div>
 
-      <div className="card" style={{ maxWidth: 720 }}>
-        <div className="card-body">
-          <form onSubmit={handleSubmit}>
-            <div className="form-row">
-              <div className="form-group" style={{ flex: 1 }}>
-                <label className="form-label">SKU (Stock Keeping Unit) *</label>
-                <input
-                  type="text"
-                  name="sku"
-                  className="form-input"
-                  placeholder="e.g. ELEC-001"
-                  value={form.sku}
-                  onChange={handleChange}
-                  required
-                  disabled={isEdit}
-                />
-                {isEdit && (
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    SKU is permanent and cannot be modified after creation
-                  </span>
-                )}
-              </div>
-
-              <div className="form-group" style={{ flex: 1 }}>
-                <label className="form-label">Category *</label>
-                <input
-                  type="text"
-                  name="category"
-                  className="form-input"
-                  placeholder="e.g., Electronics, Grocery, Dairy"
-                  value={form.category}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Product Name *</label>
+      <div className="max-w-2xl bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-8">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                SKU (Stock Keeping Unit) *
+              </label>
               <input
                 type="text"
-                name="name"
-                className="form-input"
-                placeholder="e.g., Wireless Bluetooth Earbuds"
-                value={form.name}
+                name="sku"
+                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition disabled:bg-slate-50 disabled:text-slate-400 font-mono"
+                placeholder="e.g. ELEC-001"
+                value={form.sku}
+                onChange={handleChange}
+                required
+                disabled={isEdit}
+              />
+              {isEdit && (
+                <span className="block mt-1 text-xs text-slate-400">
+                  SKU is permanent and cannot be modified after creation
+                </span>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                Category *
+              </label>
+              <input
+                type="text"
+                name="category"
+                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+                placeholder="e.g., Electronics, Grocery, Dairy"
+                value={form.category}
+                onChange={handleChange}
+                required
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+              Product Name *
+            </label>
+            <input
+              type="text"
+              name="name"
+              className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+              placeholder="e.g., Wireless Bluetooth Earbuds"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                Purchase / Cost Price (₹) *
+              </label>
+              <input
+                type="number"
+                name="purchasePrice"
+                step="0.01"
+                min="0"
+                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+                placeholder="0.00"
+                value={form.purchasePrice}
                 onChange={handleChange}
                 required
               />
             </div>
 
-            <div className="form-row">
-              <div className="form-group" style={{ flex: 1 }}>
-                <label className="form-label">Purchase / Cost Price (₹) *</label>
-                <input
-                  type="number"
-                  name="purchasePrice"
-                  step="0.01"
-                  min="0"
-                  className="form-input"
-                  placeholder="0.00"
-                  value={form.purchasePrice}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-
-              <div className="form-group" style={{ flex: 1 }}>
-                <label className="form-label">Selling Price (₹) *</label>
-                <input
-                  type="number"
-                  name="sellingPrice"
-                  step="0.01"
-                  min="0"
-                  className="form-input"
-                  placeholder="0.00"
-                  value={form.sellingPrice}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                Selling Price (₹) *
+              </label>
+              <input
+                type="number"
+                name="sellingPrice"
+                step="0.01"
+                min="0"
+                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+                placeholder="0.00"
+                value={form.sellingPrice}
+                onChange={handleChange}
+                required
+              />
             </div>
+          </div>
 
-            <div className="form-row">
-              <div className="form-group" style={{ flex: 1 }}>
-                <label className="form-label">
-                  Initial Stock Quantity {isEdit ? '(Read Only)' : '*'}
-                </label>
-                <input
-                  type="number"
-                  name="stock"
-                  min="0"
-                  className="form-input"
-                  placeholder="0"
-                  value={form.stock}
-                  onChange={handleChange}
-                  disabled={isEdit}
-                  required={!isEdit}
-                />
-                {isEdit && (
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    To adjust stock, visit the Inventory management tab
-                  </span>
-                )}
-              </div>
-
-              <div className="form-group" style={{ flex: 1 }}>
-                <label className="form-label">Low Stock Reorder Threshold *</label>
-                <input
-                  type="number"
-                  name="reorderLevel"
-                  min="0"
-                  className="form-input"
-                  placeholder="10"
-                  value={form.reorderLevel}
-                  onChange={handleChange}
-                  required
-                />
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                  Triggers alerts when stock falls to or below this count
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                Initial Stock Quantity {isEdit ? '(Read Only)' : '*'}
+              </label>
+              <input
+                type="number"
+                name="stock"
+                min="0"
+                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition disabled:bg-slate-50 disabled:text-slate-400"
+                placeholder="0"
+                value={form.stock}
+                onChange={handleChange}
+                disabled={isEdit}
+                required={!isEdit}
+              />
+              {isEdit && (
+                <span className="block mt-1 text-xs text-slate-400">
+                  To adjust stock, visit the Inventory management tab
                 </span>
-              </div>
+              )}
             </div>
 
-            <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end', marginTop: 24 }}>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={() => navigate('/products')}
-              >
-                Cancel
-              </button>
-              <button type="submit" className="btn btn-primary" disabled={loading}>
-                {loading ? 'Saving Product...' : isEdit ? 'Update Product' : 'Create Product'}
-              </button>
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                Low Stock Reorder Threshold *
+              </label>
+              <input
+                type="number"
+                name="reorderLevel"
+                min="0"
+                className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+                placeholder="10"
+                value={form.reorderLevel}
+                onChange={handleChange}
+                required
+              />
+              <span className="block mt-1 text-xs text-slate-400">
+                Triggers alerts when stock falls to or below this count
+              </span>
             </div>
-          </form>
-        </div>
+          </div>
+
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            <button
+              type="button"
+              className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-xs hover:bg-slate-50 transition"
+              onClick={() => navigate('/products')}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 transition disabled:opacity-60"
+              disabled={loading}
+            >
+              {loading ? 'Saving Product...' : isEdit ? 'Update Product' : 'Create Product'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

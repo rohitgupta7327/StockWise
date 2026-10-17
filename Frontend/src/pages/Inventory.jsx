@@ -93,22 +93,28 @@ const Inventory = () => {
 
   return (
     <div>
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Inventory Management</h1>
-          <p className="page-description">Adjust product stock levels and audit movement logs</p>
-        </div>
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Inventory Management</h1>
+        <p className="text-sm text-slate-500 mt-1">Adjust product stock levels and audit movement logs</p>
       </div>
 
-      <div className="tabs">
+      <div className="flex border-b border-slate-200 mb-6 gap-2">
         <button
-          className={`tab ${tab === 'adjust' ? 'active' : ''}`}
+          className={`px-4 py-2.5 text-sm font-semibold border-b-2 transition -mb-px ${
+            tab === 'adjust'
+              ? 'border-indigo-600 text-indigo-600'
+              : 'border-transparent text-slate-500 hover:text-slate-700'
+          }`}
           onClick={() => setTab('adjust')}
         >
           Stock Adjustment
         </button>
         <button
-          className={`tab ${tab === 'history' ? 'active' : ''}`}
+          className={`px-4 py-2.5 text-sm font-semibold border-b-2 transition -mb-px ${
+            tab === 'history'
+              ? 'border-indigo-600 text-indigo-600'
+              : 'border-transparent text-slate-500 hover:text-slate-700'
+          }`}
           onClick={() => setTab('history')}
         >
           Movement History
@@ -116,188 +122,151 @@ const Inventory = () => {
       </div>
 
       {tab === 'adjust' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'start' }}>
-          <div className="card">
-            <div className="card-header">
-              <div className="card-title">Record Stock Adjustment</div>
-            </div>
-            <div className="card-body">
-              <form onSubmit={handleAdjust}>
-                <div className="form-group">
-                  <label className="form-label">Product *</label>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-8">
+            <h2 className="text-base font-semibold text-slate-900 mb-6">Record Stock Adjustment</h2>
+            <form onSubmit={handleAdjust} className="space-y-5">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                  Product *
+                </label>
+                <select
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+                  value={form.productId}
+                  onChange={(e) => setForm({ ...form, productId: e.target.value })}
+                  required
+                >
+                  <option value="">Select a product...</option>
+                  {products.map((p) => (
+                    <option key={p._id} value={p._id}>
+                      {p.sku} — {p.name} (Stock: {p.stock})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                    Type *
+                  </label>
                   <select
-                    className="form-select"
-                    value={form.productId}
-                    onChange={(e) => setForm({ ...form, productId: e.target.value })}
-                    required
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+                    value={form.type}
+                    onChange={(e) => setForm({ ...form, type: e.target.value })}
                   >
-                    <option value="">Select a product...</option>
-                    {products.map((p) => (
-                      <option key={p._id} value={p._id}>
-                        {p.sku} — {p.name} (Stock: {p.stock})
-                      </option>
-                    ))}
+                    <option value="received">Stock Received (Inward)</option>
+                    <option value="adjustment">Manual Adjustment (Reconcile)</option>
                   </select>
                 </div>
-
-                <div className="form-row">
-                  <div className="form-group" style={{ flex: 1 }}>
-                    <label className="form-label">Type *</label>
-                    <select
-                      className="form-select"
-                      value={form.type}
-                      onChange={(e) => setForm({ ...form, type: e.target.value })}
-                    >
-                      <option value="received">Stock Received (Inward)</option>
-                      <option value="adjustment">Manual Adjustment (Reconcile)</option>
-                    </select>
-                  </div>
-                  <div className="form-group" style={{ flex: 1 }}>
-                    <label className="form-label">Quantity *</label>
-                    <input
-                      type="number"
-                      className="form-input"
-                      placeholder="e.g. 50 or -5"
-                      value={form.quantity}
-                      onChange={(e) => setForm({ ...form, quantity: e.target.value })}
-                      required
-                    />
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      Positive = increase, negative = decrease
-                    </span>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Reason / Invoice Note</label>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                    Quantity *
+                  </label>
                   <input
-                    type="text"
-                    className="form-input"
-                    placeholder="e.g., Supplier PO #9823 or physical count discrepancy"
-                    value={form.reason}
-                    onChange={(e) => setForm({ ...form, reason: e.target.value })}
+                    type="number"
+                    className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+                    placeholder="e.g. 50 or -5"
+                    value={form.quantity}
+                    onChange={(e) => setForm({ ...form, quantity: e.target.value })}
+                    required
                   />
+                  <span className="block mt-1 text-xs text-slate-400">
+                    Positive = increase, negative = decrease
+                  </span>
                 </div>
+              </div>
 
-                <button type="submit" className="btn btn-primary" disabled={adjustLoading}>
-                  {adjustLoading ? 'Updating Stock...' : 'Submit Adjustment'}
-                </button>
-              </form>
-            </div>
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-1.5">
+                  Reason / Invoice Note
+                </label>
+                <input
+                  type="text"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+                  placeholder="e.g., Supplier PO #9823 or physical count discrepancy"
+                  value={form.reason}
+                  onChange={(e) => setForm({ ...form, reason: e.target.value })}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full sm:w-auto rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-700 transition disabled:opacity-60"
+                disabled={adjustLoading}
+              >
+                {adjustLoading ? 'Updating Stock...' : 'Submit Adjustment'}
+              </button>
+            </form>
           </div>
 
           {/* Live Preview Card */}
-          <div className="card">
-            <div className="card-header">
-              <div className="card-title">Live Calculation Preview</div>
-            </div>
-            <div className="card-body">
-              {selectedProduct ? (
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs p-6 sm:p-8">
+            <h2 className="text-base font-semibold text-slate-900 mb-6">Live Calculation Preview</h2>
+            {selectedProduct ? (
+              <div className="space-y-6">
                 <div>
-                  <div style={{ marginBottom: 16 }}>
-                    <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>{selectedProduct.name}</h3>
-                    <p className="text-muted">
-                      {selectedProduct.sku} · {selectedProduct.category}
-                    </p>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
-                    <div
-                      style={{
-                        padding: 16,
-                        background: 'var(--gray-50)',
-                        borderRadius: 'var(--radius-md)',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <div className="text-muted" style={{ fontSize: '0.78rem', marginBottom: 4 }}>
-                        Current Stock
-                      </div>
-                      <div style={{ fontSize: '1.3rem', fontWeight: 800 }}>
-                        {selectedProduct.stock}
-                      </div>
-                    </div>
+                  <h3 className="text-lg font-bold text-slate-900">{selectedProduct.name}</h3>
+                  <p className="text-sm text-slate-500 font-mono mt-0.5">
+                    {selectedProduct.sku} · {selectedProduct.category}
+                  </p>
+                </div>
 
-                    <div
-                      style={{
-                        padding: 16,
-                        background: hasValidQty
-                          ? parsedQty >= 0
-                            ? 'var(--success-50)'
-                            : 'var(--danger-50)'
-                          : 'var(--gray-50)',
-                        borderRadius: 'var(--radius-md)',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <div className="text-muted" style={{ fontSize: '0.78rem', marginBottom: 4 }}>
-                        Change
-                      </div>
-                      <div
-                        style={{
-                          fontSize: '1.3rem',
-                          fontWeight: 800,
-                          color: hasValidQty
-                            ? parsedQty >= 0
-                              ? 'var(--success-600)'
-                              : 'var(--danger-600)'
-                            : 'inherit',
-                        }}
-                      >
-                        {hasValidQty ? (parsedQty >= 0 ? `+${parsedQty}` : parsedQty) : '—'}
-                      </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="p-4 bg-slate-50 rounded-2xl text-center border border-slate-100">
+                    <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">
+                      Current
                     </div>
-
-                    <div
-                      style={{
-                        padding: 16,
-                        background: 'var(--primary-50)',
-                        borderRadius: 'var(--radius-md)',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <div className="text-muted" style={{ fontSize: '0.78rem', marginBottom: 4 }}>
-                        Resulting Stock
-                      </div>
-                      <div
-                        style={{
-                          fontSize: '1.3rem',
-                          fontWeight: 800,
-                          color: 'var(--primary-600)',
-                        }}
-                      >
-                        {hasValidQty ? selectedProduct.stock + parsedQty : '—'}
-                      </div>
+                    <div className="text-2xl font-bold text-slate-900">
+                      {selectedProduct.stock}
                     </div>
                   </div>
 
                   <div
-                    style={{
-                      marginTop: 16,
-                      padding: 12,
-                      background: 'var(--gray-50)',
-                      borderRadius: 'var(--radius-md)',
-                    }}
+                    className={`p-4 rounded-2xl text-center border ${
+                      hasValidQty
+                        ? parsedQty >= 0
+                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                          : 'bg-rose-50 text-rose-700 border-rose-200'
+                        : 'bg-slate-50 text-slate-500 border-slate-100'
+                    }`}
                   >
-                    <span className="text-muted" style={{ fontSize: '0.82rem' }}>
-                      Reorder Threshold: <strong>{selectedProduct.reorderLevel} units</strong>
-                    </span>
+                    <div className="text-xs font-semibold uppercase tracking-wider mb-1">
+                      Change
+                    </div>
+                    <div className="text-2xl font-bold">
+                      {hasValidQty ? (parsedQty >= 0 ? `+${parsedQty}` : parsedQty) : '—'}
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-indigo-50 rounded-2xl text-center border border-indigo-100">
+                    <div className="text-xs font-semibold text-indigo-600 uppercase tracking-wider mb-1">
+                      Result
+                    </div>
+                    <div className="text-2xl font-bold text-indigo-700">
+                      {hasValidQty ? selectedProduct.stock + parsedQty : '—'}
+                    </div>
                   </div>
                 </div>
-              ) : (
-                <div className="empty-state">
-                  <p>Select a product to view real-time stock simulation</p>
+
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600">
+                  Reorder Threshold: <strong className="text-slate-900 font-semibold">{selectedProduct.reorderLevel} units</strong>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : (
+              <div className="py-12 text-center text-sm text-slate-400">
+                Select a product to view real-time stock simulation
+              </div>
+            )}
           </div>
         </div>
       )}
 
       {tab === 'history' && (
         <div>
-          <div className="toolbar">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-6">
             <select
-              className="filter-select"
+              className="rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm text-slate-700 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
               value={movFilter.type}
               onChange={(e) => {
                 setMovFilter({ ...movFilter, type: e.target.value });
@@ -310,19 +279,22 @@ const Inventory = () => {
               <option value="sale">Sale</option>
               <option value="return">Return</option>
             </select>
-            <div className="date-filter">
-              <label>From:</label>
+
+            <div className="flex items-center gap-2 text-sm text-slate-600">
+              <label className="text-xs font-semibold text-slate-500">From:</label>
               <input
                 type="date"
+                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
                 value={movFilter.startDate}
                 onChange={(e) => {
                   setMovFilter({ ...movFilter, startDate: e.target.value });
                   setMovPage(1);
                 }}
               />
-              <label>To:</label>
+              <label className="text-xs font-semibold text-slate-500">To:</label>
               <input
                 type="date"
+                className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
                 value={movFilter.endDate}
                 onChange={(e) => {
                   setMovFilter({ ...movFilter, endDate: e.target.value });
@@ -332,65 +304,63 @@ const Inventory = () => {
             </div>
           </div>
 
-          <div className="card">
-            <div className="table-container">
+          <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div className="overflow-x-auto">
               {movementLoading ? (
                 <LoadingSpinner />
               ) : movements.length === 0 ? (
-                <div className="empty-state">
-                  <h3>No movement history recorded</h3>
-                  <p>Inventory adjustments, purchases, and sales will appear here</p>
+                <div className="p-12 text-center">
+                  <h3 className="text-base font-semibold text-slate-800">No movement history recorded</h3>
+                  <p className="text-sm text-slate-500 mt-1">Inventory adjustments, purchases, and sales will appear here</p>
                 </div>
               ) : (
-                <table className="table">
+                <table className="w-full text-left text-sm">
                   <thead>
-                    <tr>
-                      <th>Date & Time</th>
-                      <th>Product</th>
-                      <th>Type</th>
-                      <th className="text-right">Quantity</th>
-                      <th className="text-right">Previous</th>
-                      <th className="text-right">New Stock</th>
-                      <th>Reference</th>
-                      <th>Staff</th>
-                      <th>Reason / Note</th>
+                    <tr className="border-b border-slate-100 bg-slate-50/75">
+                      <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Date & Time</th>
+                      <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Product</th>
+                      <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Type</th>
+                      <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right">Quantity</th>
+                      <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right">Previous</th>
+                      <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right">New Stock</th>
+                      <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Reference</th>
+                      <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Staff</th>
+                      <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Reason / Note</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody className="divide-y divide-slate-100">
                     {movements.map((m) => (
-                      <tr key={m._id}>
-                        <td style={{ fontSize: '0.82rem', whiteSpace: 'nowrap' }}>
+                      <tr key={m._id} className="hover:bg-slate-50/50 transition">
+                        <td className="px-6 py-4 text-xs text-slate-500 whitespace-nowrap">
                           {formatDateTime(m.createdAt)}
                         </td>
-                        <td>
-                          <div className="font-semibold">{m.product?.name}</div>
-                          <span className="sku-badge">{m.product?.sku}</span>
+                        <td className="px-6 py-4">
+                          <div className="font-medium text-slate-900">{m.product?.name}</div>
+                          <span className="font-mono text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                            {m.product?.sku}
+                          </span>
                         </td>
-                        <td>
+                        <td className="px-6 py-4">
                           <Badge variant={TYPE_BADGE_MAP[m.type] || 'neutral'}>
                             {m.type}
                           </Badge>
                         </td>
-                        <td className="text-right">
+                        <td className="px-6 py-4 text-right">
                           <span
-                            style={{
-                              fontWeight: 700,
-                              color:
-                                m.quantity >= 0
-                                  ? 'var(--success-600)'
-                                  : 'var(--danger-600)',
-                            }}
+                            className={`font-bold ${
+                              m.quantity >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                            }`}
                           >
                             {m.quantity >= 0 ? `+${m.quantity}` : m.quantity}
                           </span>
                         </td>
-                        <td className="text-right">{m.previousStock}</td>
-                        <td className="text-right font-bold">{m.newStock}</td>
-                        <td className="font-mono" style={{ fontSize: '0.8rem' }}>
+                        <td className="px-6 py-4 text-right text-slate-600">{m.previousStock}</td>
+                        <td className="px-6 py-4 text-right font-bold text-slate-900">{m.newStock}</td>
+                        <td className="px-6 py-4 font-mono text-xs text-slate-500">
                           {m.reference}
                         </td>
-                        <td>{m.user?.name}</td>
-                        <td className="text-muted" style={{ fontSize: '0.82rem' }}>
+                        <td className="px-6 py-4 text-slate-700">{m.user?.name}</td>
+                        <td className="px-6 py-4 text-xs text-slate-500">
                           {m.reason}
                         </td>
                       </tr>

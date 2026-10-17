@@ -102,53 +102,68 @@ const Reports = () => {
 
   return (
     <div>
-      <div className="page-header">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="page-title">Reports & Analytics</h1>
-          <p className="page-description">Sales performance, profit margins, and inventory metrics</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">Reports & Analytics</h1>
+          <p className="text-sm text-slate-500 mt-1">Sales performance, profit margins, and inventory metrics</p>
         </div>
-        <button className="btn btn-secondary" onClick={handleCSV}>
-          <HiOutlineDownload /> Export CSV
+        <button
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-xs hover:bg-slate-50 transition shrink-0"
+          onClick={handleCSV}
+        >
+          <HiOutlineDownload className="text-lg" /> Export CSV
         </button>
       </div>
 
-      <div className="toolbar">
-        <div className="tabs" style={{ marginBottom: 0, borderBottom: 'none' }}>
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
+        <div className="flex border-b border-slate-200 gap-2">
           <button
-            className={`tab ${tab === 'sales' ? 'active' : ''}`}
+            className={`px-4 py-2.5 text-sm font-semibold border-b-2 transition -mb-px ${
+              tab === 'sales'
+                ? 'border-indigo-600 text-indigo-600'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+            }`}
             onClick={() => setTab('sales')}
           >
             Sales Overview
           </button>
           <button
-            className={`tab ${tab === 'profit' ? 'active' : ''}`}
+            className={`px-4 py-2.5 text-sm font-semibold border-b-2 transition -mb-px ${
+              tab === 'profit'
+                ? 'border-indigo-600 text-indigo-600'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+            }`}
             onClick={() => setTab('profit')}
           >
             Profit Analysis
           </button>
           <button
-            className={`tab ${tab === 'top' ? 'active' : ''}`}
+            className={`px-4 py-2.5 text-sm font-semibold border-b-2 transition -mb-px ${
+              tab === 'top'
+                ? 'border-indigo-600 text-indigo-600'
+                : 'border-transparent text-slate-500 hover:text-slate-700'
+            }`}
             onClick={() => setTab('top')}
           >
             Top Products
           </button>
         </div>
 
-        <div style={{ marginLeft: 'auto' }}>
-          <div className="date-filter">
-            <label>From:</label>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <label>To:</label>
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </div>
+        <div className="flex items-center gap-2 text-sm text-slate-600">
+          <label className="text-xs font-semibold text-slate-500">From:</label>
+          <input
+            type="date"
+            className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <label className="text-xs font-semibold text-slate-500">To:</label>
+          <input
+            type="date"
+            className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/20 shadow-xs transition"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
         </div>
       </div>
 
@@ -158,62 +173,52 @@ const Reports = () => {
         <>
           {/* Sales Report Tab */}
           {tab === 'sales' && salesData && (
-            <div>
-              <div className="kpi-grid">
-                <div className="kpi-card">
-                  <div className="kpi-info">
-                    <h3>Total Gross Sales</h3>
-                    <div className="kpi-value">{formatCurrency(salesData.summary.totalSales)}</div>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Gross Sales</span>
+                  <div className="text-2xl font-bold text-slate-900 tracking-tight mt-1">
+                    {formatCurrency(salesData.summary.totalSales)}
                   </div>
                 </div>
-                <div className="kpi-card">
-                  <div className="kpi-info">
-                    <h3>Total Transactions</h3>
-                    <div className="kpi-value">{formatNumber(salesData.summary.transactionCount)}</div>
+                <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Transactions</span>
+                  <div className="text-2xl font-bold text-slate-900 tracking-tight mt-1">
+                    {formatNumber(salesData.summary.transactionCount)}
                   </div>
                 </div>
-                <div className="kpi-card">
-                  <div className="kpi-info">
-                    <h3>Average Order Value</h3>
-                    <div className="kpi-value">{formatCurrency(salesData.summary.avgSaleValue)}</div>
+                <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Average Order Value</span>
+                  <div className="text-2xl font-bold text-slate-900 tracking-tight mt-1">
+                    {formatCurrency(salesData.summary.avgSaleValue)}
                   </div>
                 </div>
-                <div className="kpi-card">
-                  <div className="kpi-info">
-                    <h3>Discounts Given</h3>
-                    <div className="kpi-value text-muted">
-                      {formatCurrency(salesData.summary.totalDiscount)}
-                    </div>
+                <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Discounts Given</span>
+                  <div className="text-2xl font-bold text-slate-500 tracking-tight mt-1">
+                    {formatCurrency(salesData.summary.totalDiscount)}
                   </div>
                 </div>
               </div>
 
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title">Daily Sales Trend</div>
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100">
+                  <h2 className="text-base font-semibold text-slate-900">Daily Sales Trend</h2>
                 </div>
-                <div className="card-body">
+                <div className="p-4 sm:p-6">
                   {salesData.dailyBreakdown?.length > 0 ? (
                     <ResponsiveContainer width="100%" height={320}>
                       <BarChart data={salesData.dailyBreakdown}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border-light)" />
-                        <XAxis
-                          dataKey="_id"
-                          tick={{ fontSize: 12 }}
-                          stroke="var(--text-muted)"
-                        />
-                        <YAxis
-                          tick={{ fontSize: 12 }}
-                          stroke="var(--text-muted)"
-                          tickFormatter={(v) => `₹${v}`}
-                        />
+                        <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                        <XAxis dataKey="_id" tick={{ fontSize: 12 }} stroke="#94a3b8" />
+                        <YAxis tick={{ fontSize: 12 }} stroke="#94a3b8" tickFormatter={(v) => `₹${v}`} />
                         <Tooltip formatter={(v) => [formatCurrency(v), 'Sales']} />
-                        <Bar dataKey="totalSales" fill="var(--primary-500)" radius={[4, 4, 0, 0]} />
+                        <Bar dataKey="totalSales" fill="#4f46e5" radius={[6, 6, 0, 0]} />
                       </BarChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="empty-state">
-                      <p>No transactions found for the selected period</p>
+                    <div className="p-8 text-center text-sm text-slate-400">
+                      No transactions found for the selected period
                     </div>
                   )}
                 </div>
@@ -223,59 +228,47 @@ const Reports = () => {
 
           {/* Profit Report Tab */}
           {tab === 'profit' && profitData && (
-            <div>
-              <div className="kpi-grid">
-                <div className="kpi-card">
-                  <div className="kpi-info">
-                    <h3>Total Revenue</h3>
-                    <div className="kpi-value">{formatCurrency(profitData.totalRevenue)}</div>
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Revenue</span>
+                  <div className="text-2xl font-bold text-slate-900 tracking-tight mt-1">
+                    {formatCurrency(profitData.totalRevenue)}
                   </div>
                 </div>
-                <div className="kpi-card">
-                  <div className="kpi-info">
-                    <h3>Cost of Goods (COGS)</h3>
-                    <div className="kpi-value">{formatCurrency(profitData.totalCost)}</div>
+                <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Cost of Goods (COGS)</span>
+                  <div className="text-2xl font-bold text-slate-900 tracking-tight mt-1">
+                    {formatCurrency(profitData.totalCost)}
                   </div>
                 </div>
-                <div className="kpi-card">
-                  <div className="kpi-info">
-                    <h3>Gross Profit</h3>
-                    <div
-                      className="kpi-value"
-                      style={{
-                        color:
-                          profitData.grossProfit >= 0
-                            ? 'var(--success-600)'
-                            : 'var(--danger-600)',
-                      }}
-                    >
-                      {formatCurrency(profitData.grossProfit)}
-                    </div>
+                <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Gross Profit</span>
+                  <div
+                    className={`text-2xl font-bold tracking-tight mt-1 ${
+                      profitData.grossProfit >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                    }`}
+                  >
+                    {formatCurrency(profitData.grossProfit)}
                   </div>
                 </div>
-                <div className="kpi-card">
-                  <div className="kpi-info">
-                    <h3>Profit Margin</h3>
-                    <div
-                      className="kpi-value"
-                      style={{
-                        color:
-                          profitData.profitMargin >= 0
-                            ? 'var(--success-600)'
-                            : 'var(--danger-600)',
-                      }}
-                    >
-                      {Number(profitData.profitMargin || 0).toFixed(1)}%
-                    </div>
+                <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">Profit Margin</span>
+                  <div
+                    className={`text-2xl font-bold tracking-tight mt-1 ${
+                      profitData.profitMargin >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                    }`}
+                  >
+                    {Number(profitData.profitMargin || 0).toFixed(1)}%
                   </div>
                 </div>
               </div>
 
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title">Revenue vs Cost Breakdown</div>
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100">
+                  <h2 className="text-base font-semibold text-slate-900">Revenue vs Cost Breakdown</h2>
                 </div>
-                <div className="card-body">
+                <div className="p-4 sm:p-6">
                   <ResponsiveContainer width="100%" height={320}>
                     <BarChart
                       data={[
@@ -284,18 +277,14 @@ const Reports = () => {
                         { name: 'Gross Profit', value: profitData.grossProfit },
                       ]}
                     >
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--border-light)" />
-                      <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="var(--text-muted)" />
-                      <YAxis
-                        tick={{ fontSize: 12 }}
-                        stroke="var(--text-muted)"
-                        tickFormatter={(v) => `₹${v}`}
-                      />
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                      <XAxis dataKey="name" tick={{ fontSize: 12 }} stroke="#94a3b8" />
+                      <YAxis tick={{ fontSize: 12 }} stroke="#94a3b8" tickFormatter={(v) => `₹${v}`} />
                       <Tooltip formatter={(v) => [formatCurrency(v)]} />
-                      <Bar dataKey="value" radius={[4, 4, 0, 0]}>
-                        <Cell fill="var(--primary-500)" />
-                        <Cell fill="var(--warning-500)" />
-                        <Cell fill="var(--success-500)" />
+                      <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                        <Cell fill="#4f46e5" />
+                        <Cell fill="#f59e0b" />
+                        <Cell fill="#10b981" />
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
@@ -306,32 +295,36 @@ const Reports = () => {
 
           {/* Top Products Tab */}
           {tab === 'top' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title">Top Selling Products</div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100">
+                  <h2 className="text-base font-semibold text-slate-900">Top Selling Products</h2>
                 </div>
-                <div className="card-body" style={{ padding: 0 }}>
+                <div className="overflow-x-auto">
                   {topProducts.length > 0 ? (
-                    <table className="table">
+                    <table className="w-full text-left text-sm">
                       <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Product</th>
-                          <th className="text-right">Qty Sold</th>
-                          <th className="text-right">Revenue</th>
+                        <tr className="border-b border-slate-100 bg-slate-50/75">
+                          <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">#</th>
+                          <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500">Product</th>
+                          <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right">Qty Sold</th>
+                          <th className="px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-slate-500 text-right">Revenue</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="divide-y divide-slate-100">
                         {topProducts.map((p, i) => (
-                          <tr key={p._id || i}>
-                            <td className="font-bold">{i + 1}</td>
-                            <td>
-                              <div className="font-bold">{p.productName}</div>
-                              <span className="sku-badge">{p.sku}</span>
+                          <tr key={p._id || i} className="hover:bg-slate-50/50 transition">
+                            <td className="px-6 py-4 font-bold text-slate-500">{i + 1}</td>
+                            <td className="px-6 py-4">
+                              <div className="font-semibold text-slate-900">{p.productName}</div>
+                              <span className="font-mono text-xs text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">
+                                {p.sku}
+                              </span>
                             </td>
-                            <td className="text-right font-bold">{formatNumber(p.totalQuantity)}</td>
-                            <td className="text-right font-bold text-primary">
+                            <td className="px-6 py-4 text-right font-bold text-slate-800">
+                              {formatNumber(p.totalQuantity)}
+                            </td>
+                            <td className="px-6 py-4 text-right font-bold text-indigo-600">
                               {formatCurrency(p.totalRevenue)}
                             </td>
                           </tr>
@@ -339,18 +332,16 @@ const Reports = () => {
                       </tbody>
                     </table>
                   ) : (
-                    <div className="empty-state">
-                      <p>No sales activity recorded</p>
-                    </div>
+                    <div className="p-8 text-center text-sm text-slate-400">No sales activity recorded</div>
                   )}
                 </div>
               </div>
 
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title">Revenue Distribution</div>
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+                <div className="px-6 py-4 border-b border-slate-100">
+                  <h2 className="text-base font-semibold text-slate-900">Revenue Distribution</h2>
                 </div>
-                <div className="card-body">
+                <div className="p-4 sm:p-6">
                   {pieChartData.length > 0 ? (
                     <ResponsiveContainer width="100%" height={350}>
                       <PieChart>
@@ -374,8 +365,8 @@ const Reports = () => {
                       </PieChart>
                     </ResponsiveContainer>
                   ) : (
-                    <div className="empty-state">
-                      <p>No revenue distribution data</p>
+                    <div className="p-8 text-center text-sm text-slate-400">
+                      No revenue distribution data
                     </div>
                   )}
                 </div>

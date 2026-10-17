@@ -40,6 +40,11 @@ const saleSchema = new mongoose.Schema(
     taxAmount: { type: Number, default: 0 },
     totalAmount: { type: Number, required: true },
     customer: { type: String, trim: true, default: '' },
+    paymentMethod: {
+      type: String,
+      enum: ['cash', 'upi', 'card'],
+      default: 'cash',
+    },
     status: {
       type: String,
       enum: ['completed', 'returned'],

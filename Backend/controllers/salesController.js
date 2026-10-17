@@ -12,7 +12,12 @@ exports.createSale = async (req, res, next) => {
   session.startTransaction();
 
   try {
-    const { items, discountPercent = 0, taxPercent = 0, customer } = req.body;
+    const { items, discountPercent = 0, taxPercent = 0, customer, paymentMethod = 'cash' } = req.body;
+
+    const validPaymentMethods = ['cash', 'upi', 'card'];
+    const sanitizedPaymentMethod = validPaymentMethods.includes(String(paymentMethod).toLowerCase())
+      ? String(paymentMethod).toLowerCase()
+      : 'cash';
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       await session.abortTransaction();
@@ -132,6 +137,7 @@ exports.createSale = async (req, res, next) => {
           taxAmount: Math.round(taxAmount * 100) / 100,
           totalAmount: Math.round(totalAmount * 100) / 100,
           customer: customer ? customer.trim() : '',
+          paymentMethod: sanitizedPaymentMethod,
           createdBy: req.user._id,
         },
       ],
@@ -168,7 +174,7 @@ exports.createSale = async (req, res, next) => {
 // @access  Private
 exports.getSales = async (req, res, next) => {
   try {
-    const { search, startDate, endDate, status, page = 1, limit = 20 } = req.query;
+    const { search, startDate, endDate, status, paymentMethod, page = 1, limit = 20 } = req.query;
     const query = {};
 
     if (search) {
@@ -177,6 +183,10 @@ exports.getSales = async (req, res, next) => {
 
     if (status) {
       query.status = status;
+    }
+
+    if (paymentMethod && ['cash', 'upi', 'card'].includes(paymentMethod.toLowerCase())) {
+      query.paymentMethod = paymentMethod.toLowerCase();
     }
 
     if (startDate || endDate) {

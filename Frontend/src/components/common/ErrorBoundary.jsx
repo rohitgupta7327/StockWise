@@ -21,63 +21,20 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div
-          style={{
-            minHeight: '100vh',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#f8fafc',
-            padding: '24px',
-            fontFamily: 'Inter, system-ui, sans-serif',
-          }}
-        >
-          <div
-            style={{
-              maxWidth: '480px',
-              width: '100%',
-              backgroundColor: '#ffffff',
-              borderRadius: '12px',
-              padding: '32px',
-              boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-              textAlign: 'center',
-            }}
-          >
-            <div
-              style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '50%',
-                backgroundColor: '#fee2e2',
-                color: '#ef4444',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                margin: '0 auto 16px',
-                fontSize: '24px',
-                fontWeight: 'bold',
-              }}
-            >
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+          <div className="max-w-md w-full bg-white rounded-2xl p-8 shadow-xl border border-slate-200/80 text-center">
+            <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto mb-4 text-xl font-bold">
               !
             </div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#0f172a', marginBottom: '8px' }}>
+            <h2 className="text-xl font-semibold text-slate-900 mb-2">
               Something went wrong
             </h2>
-            <p style={{ fontSize: '0.875rem', color: '#64748b', marginBottom: '24px' }}>
+            <p className="text-sm text-slate-500 mb-6">
               The application encountered an unexpected error. Please refresh the page to continue.
             </p>
             <button
               onClick={this.handleReload}
-              style={{
-                backgroundColor: '#4f46e5',
-                color: '#ffffff',
-                border: 'none',
-                padding: '10px 20px',
-                borderRadius: '8px',
-                fontWeight: 500,
-                cursor: 'pointer',
-                fontSize: '0.875rem',
-              }}
+              className="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 transition"
             >
               Refresh Page
             </button>
