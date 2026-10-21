@@ -7,7 +7,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47a248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![License](https://img.shields.io/badge/License-ISC-blue.svg)](LICENSE)
 
-StockWise is a full-stack, enterprise-grade retail inventory management and Point-of-Sale (POS) system engineered for high performance, reliability, and security. Built with a clean 3-tier architecture, it features real-time stock reconciliation, automated invoice generation, aggregated financial analytics, and strict role-based access control (RBAC).
+StockWise is a full-stack, enterprise-grade retail inventory management and Point-of-Sale (POS) system engineered for high performance, reliability, and security. Built with a clean 3-tier architecture, it features real-time stock reconciliation, automated invoice generation, aggregated financial analytics, and strict role-based access control (RBAC). Visit-> https://stockwise-retail.netlify.app/login
 
 ---
 
